@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.contrib.auth import get_user_model
 from phonenumber_field.modelfields import PhoneNumberField
 
-
 User = get_user_model()
 
 
@@ -80,3 +79,17 @@ class Complaint(models.Model):
 
     def __str__(self):
         return f'Жалоба от {self.user} на квартиру {self.flat}'
+
+
+class Owner(models.Model):
+    name = models.CharField('ФИО собственника', max_length=200)
+    phone = models.CharField('Телефон', max_length=20, blank=True)
+    flats = models.ManyToManyField(
+        Flat,
+        blank=True,
+        related_name='owners',
+        verbose_name='Квартиры'
+    )
+
+    def __str__(self):
+        return self.name

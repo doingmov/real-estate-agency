@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Flat, Complaint
+from .models import Flat, Complaint, Owner
 
 
 class FlatAdmin(admin.ModelAdmin):
@@ -9,7 +9,8 @@ class FlatAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'town', 'town_district', 'address', 'owner', 'owners_phonenumber',
+                'town', 'town_district', 'address', 'owner', 'owners_phonenumber', 
+                'owner_pure_phone',
                 'price', 'rooms_number', 'living_area', 'floor', 'has_balcony',
                 'description', 'construction_year', 'active', 'new_building', 'likes'
             )
@@ -32,5 +33,11 @@ class ComplaintAdmin(admin.ModelAdmin):
     list_filter = ('flat', 'created_at')
 
 
+class OwnerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'phone')
+    raw_id_fields = ('flats',)
+
+
+admin.site.register(Owner, OwnerAdmin)
 admin.site.register(Flat, FlatAdmin)
 admin.site.register(Complaint, ComplaintAdmin)
