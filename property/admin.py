@@ -18,9 +18,9 @@ class FlatAdmin(admin.ModelAdmin):
             'fields': ('created_at',),
         }),
     )
-    list_display = ('address', 'price', 'new_building', 'construction_year', 'town')
+    list_display = ('address', 'price', 'new_building', 'construction_year', 'town', 'owner', 'active')
     list_editable = ('new_building',)
-    list_filter = ('town', 'rooms_number', 'active', 'new_building')
+    list_filter = ('town', 'rooms_number', 'active', 'new_building', 'has_balcony', 'construction_year')
 
 
 admin.site.register(Flat, FlatAdmin)
