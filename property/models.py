@@ -47,5 +47,12 @@ class Flat(models.Model):
         blank=True,
         db_index=True)
 
+    new_building = models.BooleanField(
+    'Новостройка',
+    null=True,
+    blank=True,
+    help_text='Отметьте, если квартира находится в новом доме'
+)
+
     def __str__(self):
         return f'{self.town}, {self.address} ({self.price}р.)'
