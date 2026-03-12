@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 User = get_user_model()
 
@@ -57,6 +59,13 @@ class Flat(models.Model):
         blank=True,
         related_name='liked_flats',
         verbose_name='Лайки'
+    )
+
+    owner_pure_phone = PhoneNumberField(
+        'Нормализованный телефон владельца',
+        blank=True,
+        null=True,
+        help_text='Номер телефона будет автоматически проверен и приведён к единому формату'
     )
 
     def __str__(self):
