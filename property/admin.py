@@ -11,7 +11,7 @@ class FlatAdmin(admin.ModelAdmin):
             'fields': (
                 'town', 'town_district', 'address', 'owner', 'owners_phonenumber',
                 'price', 'rooms_number', 'living_area', 'floor', 'has_balcony',
-                'description', 'construction_year', 'active', 'new_building'
+                'description', 'construction_year', 'active', 'new_building', 'likes'
             )
         }),
         ('Дата создания', {
@@ -21,6 +21,7 @@ class FlatAdmin(admin.ModelAdmin):
     list_display = ('address', 'price', 'new_building', 'construction_year', 'town', 'owner', 'active')
     list_editable = ('new_building',)
     list_filter = ('town', 'rooms_number', 'active', 'new_building', 'has_balcony', 'construction_year')
+    raw_id_fields = ('likes',)
 
 
 class ComplaintAdmin(admin.ModelAdmin):

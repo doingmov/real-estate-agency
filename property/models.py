@@ -12,10 +12,8 @@ class Flat(models.Model):
         'Когда создано объявление',
         default=timezone.now,
         db_index=True)
-
     description = models.TextField('Текст объявления', blank=True)
     price = models.IntegerField('Цена квартиры', db_index=True)
-
     town = models.CharField(
         'Город, где находится квартира',
         max_length=50,
@@ -32,7 +30,6 @@ class Flat(models.Model):
         'Этаж',
         max_length=3,
         help_text='Первый этаж, последний этаж, пятый этаж')
-
     rooms_number = models.IntegerField(
         'Количество комнат в квартире',
         db_index=True)
@@ -41,7 +38,6 @@ class Flat(models.Model):
         null=True,
         blank=True,
         db_index=True)
-
     has_balcony = models.BooleanField('Наличие балкона', null=True, blank=True, db_index=True)
     active = models.BooleanField('Активно-ли объявление', db_index=True)
     construction_year = models.IntegerField(
@@ -49,12 +45,18 @@ class Flat(models.Model):
         null=True,
         blank=True,
         db_index=True)
-
     new_building = models.BooleanField(
         'Новостройка',
         null=True,
         blank=True,
         help_text='Отметьте, если квартира находится в новом доме'
+    )
+
+    likes = models.ManyToManyField(
+        User,
+        blank=True,
+        related_name='liked_flats',
+        verbose_name='Лайки'
     )
 
     def __str__(self):
