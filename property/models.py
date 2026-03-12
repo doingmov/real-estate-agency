@@ -1,5 +1,8 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Flat(models.Model):
@@ -48,11 +51,21 @@ class Flat(models.Model):
         db_index=True)
 
     new_building = models.BooleanField(
-    'Новостройка',
-    null=True,
-    blank=True,
-    help_text='Отметьте, если квартира находится в новом доме'
-)
+        'Новостройка',
+        null=True,
+        blank=True,
+        help_text='Отметьте, если квартира находится в новом доме'
+    )
 
     def __str__(self):
         return f'{self.town}, {self.address} ({self.price}р.)'
+
+
+class Complaint(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    flat = models.ForeignKey(Flat, on_delete=models.CASCADE, verbose_name='Квартира')
+    text = models.TextField('Текст жалобы')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Когда создана')
+
+    def __str__(self):
+        return f'Жалоба от {self.user} на квартиру {self.flat}'
