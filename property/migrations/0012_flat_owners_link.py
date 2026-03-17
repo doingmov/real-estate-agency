@@ -1,4 +1,3 @@
-# property/migrations/0012_flat_owners_link.py
 from django.db import migrations
 
 
@@ -6,13 +5,16 @@ def link_flat_owners(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
     Owner = apps.get_model('property', 'Owner')
 
-    for flat in Flat.objects.all():
-        if flat.owner:
-            owner_obj = Owner.objects.filter(name=flat.owner).first()
+    for flat in Flat.objects.all().iterator():
+        phone_pure = flat.owner_pure_phone
+
+        if phone_pure:
+            owner_obj = Owner.objects.filter(phone_pure=phone_pure).first()
             if not owner_obj:
                 owner_obj = Owner.objects.create(
-                    name=flat.owner,
-                    phone=flat.owners_phonenumber or ''
+                    name=flat.owner or '',
+                    phone=flat.owners_phonenumber or '',
+                    phone_pure=phone_pure
                 )
             owner_obj.flats.add(flat)
 

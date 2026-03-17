@@ -1,23 +1,30 @@
 from django.db import migrations
+from phonenumber_field.phonenumber import PhoneNumber
 
-def forwards_func(apps, schema_editor):
+
+def create_owners(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
     Owner = apps.get_model('property', 'Owner')
 
-    for flat in Flat.objects.all():
-        if flat.owner:
-            owner_obj, created = Owner.objects.get_or_create(
-                name=flat.owner,
-                phone=flat.owners_phonenumber
-            )
-            
+    for flat in Flat.objects.all().iterator():
+        phone_pure = flat.owner_pure_phone
+        if phone_pure:
+            owner_obj = Owner.objects.filter(phone_pure=phone_pure).first()
+            if not owner_obj:
+                owner_obj = Owner.objects.create(
+                    name=flat.owner or '',
+                    phone=flat.owners_phonenumber or '',
+                    phone_pure=phone_pure
+                )
+            owner_obj.flats.add(flat)
+
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('property', '0010_owner'),
+        ('property', '0009_fill_owner_pure_phone'),
     ]
 
     operations = [
-        migrations.RunPython(forwards_func),
+        migrations.RunPython(create_owners, reverse_code=migrations.RunPython.noop),
     ]
